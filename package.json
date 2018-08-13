@@ -21,6 +21,7 @@
   "homepage": "https://github.com/AdamSlack/chrome-web-store-scraper#readme",
   "dependencies": {
     "bluebird": "^3.5.1",
+    "chai": "^4.1.2",
     "cheerio": "^1.0.0-rc.2",
     "request": "^2.88.0"
   }

@@ -1,0 +1,7 @@
+{
+    "offline" : "_feature=offline",
+    "byGoogle" : "_feature=google",
+    "free" : "_feature=free",
+    "android" : "_feature=android",
+    "googleDrive" : "_feature=drive"
+}

@@ -6,40 +6,8 @@ const cheerio = require('cheerio');
 class ChromeWebStoreScraper {
 
     constructor() {
-        this.searchCategories = this.initSearchCategories();
-        this.searchFeatures = this.initSearchFeatures();
-    }
-
-    initSearchFeatures() {
-        return {
-            offline : '_feature=offline',
-            byGogle : '_feature=google',
-            free : '_feature=free',
-            android : '_feature=android',
-            googleDribe : '_feature=drive'
-        }
-    }
-
-    initSearchCategories() {
-        return {
-            all : 'extensions',
-            accessibility : 'ext/22-accessibility',
-            blogging : 'ext/10-blogging',
-            byGoogle : 'ext/15-by-google',
-            developerTools : 'ext/11-web-development',
-            fun : 'ext/14-fun',
-            newsAndWeather : 'ext/6-news',
-            news : 'ext/6-news',
-            weather : 'ext/6-news',
-            photos : 'ext/28-photos',
-            productivity : 'ext/7-productivity',
-            searchTools : 'ext/38-search-tools',
-            shopping : 'ext/12-shopping',
-            socialAndCommunication : '1-communication',
-            social : '1-communication',
-            communication : '1-communication',
-            sports : ''
-        }
+        this.searchCategories = require('../data/search_categories.json');
+        this.searchFeatures = require('../data/search_features.json');
     }
 
     async scrapeApp() {
@@ -62,38 +30,49 @@ class ChromeWebStoreScraper {
 
     }
 
-    async search(
-        searchString=undefined,
-        options={
-        searchCategory : 'all',
-        searchFilters : []
-
-    }) {
-
-        // Check Parameter Validity
-        if(!searchString) {
-            throw 'Search String Parameter not defined.';
-        }
-        if(! options.searchFilters instanceof Array) {
-            console.log('NOT AN ARRAY.')
-            throw 'Search Filter Must Be Provided as an Array'
-        }
-        if(options.searchFilters.some((f) => !this.searchFilters[f])) {
-            throw 'Invalid Search Filter Provided.'
-        }
+    buildSearchURLString( searchString, options={searchCategory : undefined, searchFeatures: undefined}) {
+        const searchCategory = options.searchCategory !== undefined ? options.searchCategory :  'all'
+        const searchFeatures = options.searchFeatures !== undefined ? options.searchFeatures :  []
 
         // Form Search URL
-        const baseURL = 'https://chrome.google.com/webstore/search/'
-        let searchURL = `${baseURL}/${options.searchString}?${this.searchCategories[options.searchCategory]}`;
+        const baseURL = 'https://chrome.google.com/webstore/search'
+        let searchURL = `${baseURL}/${searchString}?_category=${this.searchCategories[searchCategory]}`;
 
-        if(this.searchFeatures.length > 0) {
-            searchURL = `${searchURL}&${this.searchFeatures.map((f) => this.searchFeatures).join('&')}`
+        if(searchFeatures.length > 0) {
+            searchURL = `${searchURL}&${searchFeatures.map((f) => this.searchFeatures[f]).join('&')}`
         }
 
-        // Perform Search
-        console.log(this.searchURL);
-        //let {err, res, body} = await request(searchURL);
-        //console.log(res.response)
+        return encodeURI(searchURL);
+    }
+
+    async search(searchString, options={searchCategory : undefined, searchFeatures: undefined}) {
+        const searchCategory = options.searchCategory !== undefined ? options.searchCategory :  'all'
+        const searchFeatures = options.searchFeatures !== undefined ? options.searchFeatures :  []
+
+        // Check options are valid.
+        if(searchFeatures.constructor !== Array) {
+            throw new Error('Search Filter Must Be Provided as an Array')
+        }
+
+        if(searchFeatures.some((f) => !this.searchFeatures[f])) {
+            throw new Error('Invalid Search Filter Provided.')
+        }
+
+        if(!this.searchCategories[searchCategory]) {
+            throw new Error('Invalid Search Category Provided.')
+        }
+
+        // build the encoded search URL.
+        const searchURL = this.buildSearchURLString(searchString, {searchCategory:searchCategory, searchFeatures:searchFeatures});
+
+        let {err, res, body} = await request(searchURL);
+
+        if(res.responseCode === undefined || res.responseCode != 200) {
+            console.log(res.responseCode);
+            //throw new Error(`Response code Not Equal 200. Problem requesting search results. Response Code: ${res.responseCode}`);
+        }
+
+        return {err, res, body}
     }
 }
 

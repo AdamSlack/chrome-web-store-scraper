@@ -1,0 +1,15 @@
+{
+    "all" : "extensions",
+    "accessibility" : "ext/22-accessibility",
+    "blogging" : "ext/10-blogging",
+    "byGoogle" : "ext/15-by-google",
+    "developerTools" : "ext/11-web-development",
+    "fun" : "ext/14-fun",
+    "newsAndWeather" : "ext/6-news",
+    "photos" : "ext/28-photos",
+    "productivity" : "ext/7-productivity",
+    "searchTools" : "ext/38-search-tools",
+    "shopping" : "ext/12-shopping",
+    "socialAndCommunication" : "ext/1-communication",
+    "sports" : ""
+}
