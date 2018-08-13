@@ -70,16 +70,27 @@ class ChromeWebStoreScraper {
 
     }) {
 
+        // Check Parameter Validity
         if(!searchString) {
             throw 'Search String Parameter not defined.';
         }
-        if(seachString)
+        if(! options.searchFilters instanceof Array) {
+            console.log('NOT AN ARRAY.')
+            throw 'Search Filter Must Be Provided as an Array'
+        }
+        if(options.searchFilters.some((f) => !this.searchFilters[f])) {
+            throw 'Invalid Search Filter Provided.'
+        }
+
+        // Form Search URL
         const baseURL = 'https://chrome.google.com/webstore/search/'
         let searchURL = `${baseURL}/${options.searchString}?${this.searchCategories[options.searchCategory]}`;
 
         if(this.searchFeatures.length > 0) {
             searchURL = `${searchURL}&${this.searchFeatures.map((f) => this.searchFeatures).join('&')}`
         }
+
+        // Perform Search
         console.log(this.searchURL);
         //let {err, res, body} = await request(searchURL);
         //console.log(res.response)
