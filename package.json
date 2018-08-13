@@ -1,0 +1,22 @@
+{
+  "name": "chrome-web-store-scraper",
+  "version": "1.0.0",
+  "description": "a scraper for the Google Chrome extensions on the chrome web store",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AdamSlack/chrome-web-store-scraper.git"
+  },
+  "author": "Adam Slack",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AdamSlack/chrome-web-store-scraper/issues"
+  },
+  "homepage": "https://github.com/AdamSlack/chrome-web-store-scraper#readme"
+}
