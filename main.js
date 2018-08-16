@@ -1,9 +1,11 @@
 const ChromeWebScraper = require('./src/chrome-web-store-scraper');
 const scraper = new ChromeWebScraper();
 
+const fs = require('fs');
 
 async function main() {
-    const {err, res, body} = await scraper.search('scraper');
+    const searchResults = await scraper.search('scraper');
+
 }
 
 main()

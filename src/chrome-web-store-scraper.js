@@ -1,6 +1,10 @@
 const util = require('util');
+
 const Promise = require('bluebird').Promise;
+
 const request = Promise.promisify(require('request'), { multiArgs: true });
+Promise.promisifyAll(request);
+
 const cheerio = require('cheerio');
 
 class ChromeWebStoreScraper {
@@ -28,6 +32,13 @@ class ChromeWebStoreScraper {
 
     async scrapeRelated() {
 
+    }
+
+    parseSearchBody(body) {
+        let $ = cheerio.load(body);
+        let searchResBody = $('Je-qe-zd-Ge.hg.S-Zb-fd').first().text();
+        //let searchResBody = $('.a-d-na.a-d.webstore-test-wall-tile.a-d-zc.Xd.dd').first().text();
+        console.log(searchResBody);
     }
 
     buildSearchURLString( searchString, options={searchCategory : undefined, searchFeatures: undefined}) {
@@ -64,15 +75,33 @@ class ChromeWebStoreScraper {
 
         // build the encoded search URL.
         const searchURL = this.buildSearchURLString(searchString, {searchCategory:searchCategory, searchFeatures:searchFeatures});
-
-        let {err, res, body} = await request(searchURL);
-
-        if(res.responseCode === undefined || res.responseCode != 200) {
-            console.log(res.responseCode);
-            //throw new Error(`Response code Not Equal 200. Problem requesting search results. Response Code: ${res.responseCode}`);
+        console.log(searchURL);
+        const resOptions = {
+            headers: {
+                'User-Agent': 'https://github.com/pandawing/node-chrome-web-store-item-property',
+                'content-type' : 'application/x-www-form-urlencoded'
+            },
+            qs: {
+                hl: 'en',
+                gl: 'US'
+            }
         }
 
-        return {err, res, body}
+        const res = await request(searchURL,{headers:{}});
+
+        const statusCode = res[0].statusCode
+        const body = res[0].body;
+
+        const fs = require('fs');
+        fs.writeFileSync('body.html', body);
+
+        if(!statusCode || statusCode != 200) {
+            throw new Error(`Response code Not Equal 200. Problem requesting search results. Response Code: ${statusCode}`);
+        }
+
+        const searchResults = this.parseSearchBody(body);
+
+        return searchResults;
     }
 }
 
