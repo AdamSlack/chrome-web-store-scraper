@@ -7,6 +7,9 @@ Promise.promisifyAll(request);
 
 const cheerio = require('cheerio');
 
+const {Builder, By, Key, until} = require('selenium-webdriver');
+
+const WAIT_THRESHOLD = 100;
 class ChromeWebStoreScraper {
 
     constructor() {
@@ -34,11 +37,35 @@ class ChromeWebStoreScraper {
 
     }
 
-    parseSearchBody(body) {
-        let $ = cheerio.load(body);
-        let searchResBody = $('Je-qe-zd-Ge.hg.S-Zb-fd').first().text();
-        //let searchResBody = $('.a-d-na.a-d.webstore-test-wall-tile.a-d-zc.Xd.dd').first().text();
-        console.log(searchResBody);
+    async parseSearchBody(driver) {
+
+        let searchResults = [];
+        let timer = 0
+        while(searchResults.length == 0){
+            searchResults = await Promise.all(driver.findElements(By.css(".a-d-na.a-d.webstore-test-wall-tile.a-d-zc.Xd.dd")));
+            timer = timer + 1;
+            if(timer > WAIT_THRESHOLD) {
+                throw new Error('Unable to find search body.');
+            }
+        }
+
+        const textHeadings = ['title', 'author', 'description','buttonText','category','numberOfRatings'];
+        const searchResultsJSON = [];
+        for(const res of searchResults) {
+            console.log(await res);
+            const html = res.getAttribute('outerHTML');
+            const text = res.getText().split('\n')
+            const resJSON = {}
+            for(let i=0;i<textHeadings.length;i++){
+                resJSON[textHeadings[i]] = text[i];
+            }
+
+            delete resJSON['buttonText'];
+            resJSON['numberOfRatings'] = resJSON['numberOfRatings'].replace(/[\(\)]/g, '');
+
+            searchResults.push(resJSON);
+        }
+        return searchResultsJSON;
     }
 
     buildSearchURLString( searchString, options={searchCategory : undefined, searchFeatures: undefined}) {
@@ -57,6 +84,7 @@ class ChromeWebStoreScraper {
     }
 
     async search(searchString, options={searchCategory : undefined, searchFeatures: undefined}) {
+
         const searchCategory = options.searchCategory !== undefined ? options.searchCategory :  'all'
         const searchFeatures = options.searchFeatures !== undefined ? options.searchFeatures :  []
 
@@ -75,31 +103,17 @@ class ChromeWebStoreScraper {
 
         // build the encoded search URL.
         const searchURL = this.buildSearchURLString(searchString, {searchCategory:searchCategory, searchFeatures:searchFeatures});
-        console.log(searchURL);
-        const resOptions = {
-            headers: {
-                'User-Agent': 'https://github.com/pandawing/node-chrome-web-store-item-property',
-                'content-type' : 'application/x-www-form-urlencoded'
-            },
-            qs: {
-                hl: 'en',
-                gl: 'US'
-            }
+
+        let searchResults = [];
+
+        console.log('Building Selenium Driver')
+        let driver = await new Builder().forBrowser('chrome').build();
+        try {
+            await driver.get(searchURL);
+            searchResults = await this.parseSearchBody(driver);
+        } finally {
+            await driver.quit();
         }
-
-        const res = await request(searchURL,{headers:{}});
-
-        const statusCode = res[0].statusCode
-        const body = res[0].body;
-
-        const fs = require('fs');
-        fs.writeFileSync('body.html', body);
-
-        if(!statusCode || statusCode != 200) {
-            throw new Error(`Response code Not Equal 200. Problem requesting search results. Response Code: ${statusCode}`);
-        }
-
-        const searchResults = this.parseSearchBody(body);
 
         return searchResults;
     }
