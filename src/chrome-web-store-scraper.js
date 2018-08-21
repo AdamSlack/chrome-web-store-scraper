@@ -85,7 +85,6 @@ class ChromeWebStoreScraper {
 
 
             searchResultsJSON.push(resJSON);
-            console.log(html,'\n\n');
         }
         return searchResultsJSON;
     }
