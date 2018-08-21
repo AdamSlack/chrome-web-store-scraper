@@ -39,8 +39,9 @@ class ChromeWebStoreScraper {
 
     async parseSearchBody(driver) {
 
-        let searchResults = [];
-        let timer = 0
+        var searchResults = [];
+        var timer = 0
+        
         while(searchResults.length == 0){
             searchResults = await Promise.all(driver.findElements(By.css(".a-d-na.a-d.webstore-test-wall-tile.a-d-zc.Xd.dd")));
             timer = timer + 1;
@@ -51,19 +52,40 @@ class ChromeWebStoreScraper {
 
         const textHeadings = ['title', 'author', 'description','buttonText','category','numberOfRatings'];
         const searchResultsJSON = [];
-        for(const res of searchResults) {
-            console.log(await res);
-            const html = res.getAttribute('outerHTML');
-            const text = res.getText().split('\n')
-            const resJSON = {}
+        console.log(`${searchResults.length} Found. Extracting Text and HTML`);
+        for(const result of searchResults) {
+            const res = await result ;
+            if(typeof res.getAttribute !== 'function'){
+                console.log('No getAttribute Method Found a Search Result.');
+
+                break;
+            }
+            if(typeof res.getText !== 'function') {
+                console.log('No getText Method Found on a Search Result.');
+                break;
+            }
+            const html = await res.getAttribute('outerHTML');
+            const text = (await res.getText()).split('\n');
+
+            const resJSON = {};
             for(let i=0;i<textHeadings.length;i++){
                 resJSON[textHeadings[i]] = text[i];
             }
 
             delete resJSON['buttonText'];
-            resJSON['numberOfRatings'] = resJSON['numberOfRatings'].replace(/[\(\)]/g, '');
+            resJSON['numberOfRatings'] = parseInt(resJSON['numberOfRatings'].replace(/[\(\)]/g, ''));
 
-            searchResults.push(resJSON);
+            let $ = cheerio.load(html);
+
+            const storeURL = $('.h-Ja-d-Ac.a-u').first().attr('href');
+            resJSON['storeURL'] = storeURL;
+
+            const averageRating = $('.rsw-stars').first().attr('g:rating_override');
+            resJSON['rating'] = parseFloat(averageRating);
+
+
+            searchResultsJSON.push(resJSON);
+            console.log(html,'\n\n');
         }
         return searchResultsJSON;
     }
