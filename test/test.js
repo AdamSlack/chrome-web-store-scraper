@@ -63,7 +63,7 @@ S        })
 
             return scraper.search(searchTerm).then(
                 (succ) => assert.isAbove(succ.length, 0),
-                (fail) => Promise.reject('Searching Failed to get an array of JSON')
+                (fail) => Promise.reject('Searching Failed to get an array of JSON', fail)
             )
         });
 
@@ -90,7 +90,7 @@ S        })
                         assert.isTrue(sameLength && sameKeys);
                     })
                 },
-                (fail) => Promise.reject('Searching Failed')
+                (fail) => Promise.reject('Searching Failed', fail)
             )
         });
     })
