@@ -214,7 +214,7 @@ class ChromeWebStoreScraper {
             searchResults = await Promise.all(driver.findElements(By.css(".a-d-na.a-d.webstore-test-wall-tile.a-d-zc.Xd.dd")));
             timer = timer + 1;
             if(timer > WAIT_THRESHOLD) {
-                throw new Error('Unable to find search body.');
+                throw new Error('Unable to find search body.','Timer:',timer);
             }
         }
 
