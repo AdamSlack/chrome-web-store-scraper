@@ -26,6 +26,11 @@ jobs:
           - v1-dependencies-{{ checksum "package.json" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
+
+      - run:
+          name: Install Detault JRE
+          command: sudo apt-get install default-jre
+
       - run:
           name: Download Selenium
           command: curl -O http://selenium-release.storage.googleapis.com/3.5/selenium-server-standalone-3.5.3.jar && sudo cp selenium-server-standalone-3.5.3.jar /bin/selenium.jar && sudo cp ./selenium /bin/selenium && sudo chmod +x /bin/selenium
