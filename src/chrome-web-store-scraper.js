@@ -7,7 +7,7 @@ Promise.promisifyAll(request);
 
 const cheerio = require('cheerio');
 
-const {Builder, By, Key, until} = require('selenium-webdriver');
+const {Builder, By, Key, until, Capabilities} = require('selenium-webdriver');
 
 const WAIT_THRESHOLD = 100;
 class ChromeWebStoreScraper {
@@ -127,8 +127,7 @@ class ChromeWebStoreScraper {
 
         let searchResults = [];
 
-        console.log('Building Selenium Driver')
-        let driver = await new Builder().forBrowser('chrome').build();
+        let driver = await this.createChromeDriver();
         try {
             await driver.get(searchURL);
             searchResults = await this.parseSearchBody(driver);
@@ -137,6 +136,21 @@ class ChromeWebStoreScraper {
         }
 
         return searchResults;
+    }
+
+    async createChromeDriver() {
+
+        const chromeOptions = {
+            args: ['--headless', '--disable-gpu', '--no-sandbox']
+        }
+        const chromeCapabilities = Capabilities.chrome();
+        chromeCapabilities.set('chromeOptions', chromeOptions);
+
+        console.log('Building Selenium Driver')
+        return new Builder()
+        .forBrowser('chrome')
+        .withCapabilities(chromeCapabilities)
+        .build();
     }
 }
 

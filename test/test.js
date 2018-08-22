@@ -55,6 +55,44 @@ S        })
                 err => assert.instanceOf(err, Error)
             );
         })
+
+        it('must return an array with more than 0 elements for a known search term', function () {
+            this.timeout(15000)
+            const scraper = new ChromeWebStoreScraper();
+            const searchTerm = 'scraper';
+
+            return scraper.search(searchTerm).then(
+                (succ) => assert.isAbove(succ.length, 0),
+                (fail) => Promise.reject('Searching Failed to get an array of JSON')
+            )
+        });
+
+        it('JSON results should all have the following keys: title, author, description, category, numberOfRatings, storeURL, rating', function () {
+            this.timeout(15000)
+            const scraper = new ChromeWebStoreScraper();
+            const searchTerm = 'scraper';
+            const expectedKeys = new Set(
+                ['title',
+                'author',
+                'description',
+                'category',
+                'numberOfRatings',
+                'storeURL',
+                'rating']
+            );
+
+            return scraper.search(searchTerm).then(
+                (succ) => {
+                    succ.every((res) => {
+                        const keys = Object.keys(res);
+                        const sameLength = expectedKeys.size == keys.length;
+                        const sameKeys = keys.every((key) => expectedKeys.has(key));
+                        assert.isTrue(sameLength && sameKeys);
+                    })
+                },
+                (fail) => Promise.reject('Searching Failed')
+            )
+        });
     })
 
     describe('#buildSearchURL()', function() {
