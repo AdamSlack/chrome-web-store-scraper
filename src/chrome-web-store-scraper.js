@@ -17,31 +17,161 @@ class ChromeWebStoreScraper {
         this.searchFeatures = require('../data/search_features.json');
     }
 
-    async scrapeApp() {
+    async scrapeApp(appURL) {
+        let driver = await this.createChromeDriver();
+        let details = {}
+        try {
+            await driver.get(appURL);
+            details = await this.scrapeDetails(driver);
+        }
+        catch(err){
+            console.log('building failed', err)
+        }
+        finally {
+            await driver.quit();
+            return details;
+        }
 
     }
 
-    async scrapeOverview() {
+    async scrapeDetails(driver) {
+        const header = await this.scrapeAppHeader(driver);
+        const overview = await this.scrapeOverview(driver);
+        const reviews = await this.scrapeReviews(driver);
+        return {
+            header: header,
+            overview : overview,
+            reviews : reviews
+        }
+    }
+
+    async scrapeReviews(driver) {
+        // gonna need to go through each page and perform this...
+        var reviewData = [];
+        var timer = 0
+        while(reviewData.length == 0){
+            reviewData = await Promise.all(driver.findElements(By.css('.h-ba-Eb ba-Eb pd-Ye-Qa')));
+            timer = timer + 1;
+            if(timer > WAIT_THRESHOLD) {
+                throw new Error('Unable to find header.');
+            }
+        }
+
+        let res = await reviewData[0];
+        let html = ''
+        let overview = {};
+
+        if(typeof res.getAttribute === 'function'){
+            html = await res.getAttribute('outerHTML');
+            overview = this.parseAppReviewsHTML(html);
+        }
+        return overview;
+    }
+
+    async scrapeOverview(driver) {
+        var overviewData = [];
+        var timer = 0
+        while(overviewData.length == 0){
+            overviewData = await Promise.all(driver.findElements(By.css(".h-e-f-b-Qe")));
+            timer = timer + 1;
+            if(timer > WAIT_THRESHOLD) {
+                throw new Error('Unable to find header.');
+            }
+        }
+
+        let res = await overviewData[0];
+        let html = ''
+        let overview = {};
+
+        if(typeof res.getAttribute === 'function'){
+            html = await res.getAttribute('outerHTML');
+            overview = this.parseAppOverviewHTML(html);
+        }
+        return overview;
 
     }
 
-    async scrapeReviews() {
+    parseAppOverviewHTML(html) {
+        const $ = cheerio.load(html);
+        const summary = $('.C-b-p-j-Pb').first().text();
+        const description = $('.C-b-p-j-Oa').first().text();
+        const version = $('.C-b-p-D-Xe.h-C-b-p-D-md').first().text()
+        const lastUpdatedDate = $('.C-b-p-D-Xe.h-C-b-p-D-xh-hh').first().text()
+        const size = $('.C-b-p-D-Xe.h-C-b-p-D-za').first().text()
+        const language = $('.C-b-p-D-Xe.h-C-b-p-D-Ba').first().text()
+        const screenshotURLs = $('.h-A-Ce-ze-Yf.A-Ce-ze-Yf').map(function(){
+            return $(this).attr('src');
+        }).get()
 
+        // Additional Info Not Guaranteed... need a strategy.
+        //const developerEmail = $('.C-b-p-rc-D-R').first().text().replace('mailto:','');
+        //const privacyPolicyURL = $('.C-b-p-rc-D-R').first().text()
+
+        const additionalInfo = $('.C-b-p-rc-D-R').map( function() {
+            return {
+                text : $(this).text(),
+                href : $(this).attr('href')
+            }
+        }).get();
+        return {
+            summary : summary ? summary : '',
+            description : description ? description : '',
+            version : version ? version : '',
+            lastUpdatedDate : lastUpdatedDate ? lastUpdatedDate : '',
+            size : size ? size : '',
+            language : language ? (language.includes('See all') ? 'multiple' : language) : '',
+            screenshotURLs : screenshotURLs ? screenshotURLs : [],
+            additionalInfo : additionalInfo ? additionalInfo : []
+        }
     }
 
-    async scrapeSupport() {
+    async scrapeAppHeader(driver) {
+        var headerData = [];
+        var timer = 0
+        while(headerData.length == 0){
+            headerData = await Promise.all(driver.findElements(By.css(".e-f-o")));
+            timer = timer + 1;
+            if(timer > WAIT_THRESHOLD) {
+                throw new Error('Unable to find header.');
+            }
+        }
 
+        let res = await headerData[0];
+        let html = ''
+        let header = {};
+
+        if(typeof res.getAttribute === 'function'){
+            html = await res.getAttribute('outerHTML');
+            header = this.parseAppHeaderHTML(html);
+        }
+        return header
     }
 
-    async scrapeRelated() {
+    parseAppHeaderHTML(html) {
+        const $ = cheerio.load(html);
+        const imgURL = $('img').first().attr('src');
+        const title = $('.e-f-w').first().text();
+        const offeredBy = $('.e-f-Me').first().text();
+        const rating = $('.rsw-stars').first().attr('g:rating_override');
+        const userCount = $('.e-f-ih').first().text().replace(' users', '').replace(' user', '');
+        const ratingCount = parseInt($('.q-N-nd').first().text().replace(/[\(\)]/g, ''));
 
+        return {
+            title : title,
+            offeredBy : offeredBy,
+            userCount : userCount,
+            rating : rating,
+            ratingCount : ratingCount,
+            imgURL : imgURL
+        }
     }
+
 
     async parseSearchBody(driver) {
 
         var searchResults = [];
         var timer = 0
-        
+
         while(searchResults.length == 0){
             searchResults = await Promise.all(driver.findElements(By.css(".a-d-na.a-d.webstore-test-wall-tile.a-d-zc.Xd.dd")));
             timer = timer + 1;
