@@ -1,3 +1,5 @@
+[![build status](https://circleci.com/gh/adamslack/chrome-web-store-scraper.png?circle-token=:circle-token)](https://circleci.com/gh/adamslack/chrome-web-store-scaper)
+
 # chrome-web-store-scraper
 A node js package for scraping the chrome web store.
 
