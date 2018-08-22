@@ -50,23 +50,61 @@ class ChromeWebStoreScraper {
         var reviewData = [];
         var timer = 0
         while(reviewData.length == 0){
-            reviewData = await Promise.all(driver.findElements(By.css('.h-ba-Eb ba-Eb pd-Ye-Qa')));
+            reviewData = await Promise.all(driver.findElements(By.css('.ba-bc-Xb.ba-ua-zl-Xb')));
             timer = timer + 1;
             if(timer > WAIT_THRESHOLD) {
-                throw new Error('Unable to find header.');
+                console.log('No Reviews Found');
+                return {};
             }
         }
 
-        let res = await reviewData[0];
-        let html = ''
-        let overview = {};
+        let reviews = [];
+        for(const data of reviewData) {
+            let res = await data;
+            let html = ''
+            let review = {};
 
-        if(typeof res.getAttribute === 'function'){
-            html = await res.getAttribute('outerHTML');
-            overview = this.parseAppReviewsHTML(html);
+            if(typeof res.getAttribute === 'function'){
+                html = await res.getAttribute('outerHTML');
+                review = this.parseAppReviewHTML(html);
+            }
+            const notAllEmpty = Object.keys(review).every((key) => {
+                const val = review[key];
+                return val != '' && val != -1 && val != [] && val != {}
+            });
+            if(notAllEmpty){
+                reviews.push(review);
+            }
         }
-        return overview;
+
+        return reviews;
     }
+
+    parseAppReviewHTML(html) {
+        const $ = cheerio.load(html);
+        const profileImageURL = $('.Lg-ee-A-O-xb').first().attr('src')
+        const displayNameField = $('.ba-bc-Xb-K').first().find('a').first();
+        const displayName = displayNameField.text();
+        const displayNameURL = displayNameField.attr('href');
+        const timestamp = $('.ba-Eb-Nf').first().text();
+        const ratingString = $('.rsw-stars').first().attr('title');
+        let rating = -1;
+        if(ratingString) {
+            rating = parseInt(ratingString.substr(0,1));
+        }
+        const comment = $('.ba-Eb-ba').first().text();
+
+        return {
+            displayName : displayName ? displayName : '',
+            profileImageURL : profileImageURL ? profileImageURL : '',
+            displayNameURL : displayNameURL ? displayNameURL : '',
+            timestamp : timestamp ? timestamp : '',
+            ratingString : ratingString ? ratingString : '',
+            rating : rating ? rating : -1,
+            comment : comment ? comment : ''
+        }
+    }
+
 
     async scrapeOverview(driver) {
         var overviewData = [];
@@ -75,7 +113,7 @@ class ChromeWebStoreScraper {
             overviewData = await Promise.all(driver.findElements(By.css(".h-e-f-b-Qe")));
             timer = timer + 1;
             if(timer > WAIT_THRESHOLD) {
-                throw new Error('Unable to find header.');
+                return {}
             }
         }
 
@@ -132,7 +170,7 @@ class ChromeWebStoreScraper {
             headerData = await Promise.all(driver.findElements(By.css(".e-f-o")));
             timer = timer + 1;
             if(timer > WAIT_THRESHOLD) {
-                throw new Error('Unable to find header.');
+                return {}
             }
         }
 

@@ -1,0 +1,62 @@
+{
+  "header": {
+    "title": "Scraper Crawler V3",
+    "offeredBy": "offered by Open Source Dev",
+    "userCount": "584",
+    "rating": "3.4285714285714284",
+    "ratingCount": 7,
+    "imgURL": "https://lh3.googleusercontent.com/sg57N9s3XR6Lty1Ob974dUDKO7yjduiDQ7YnWrRA08SsZwYSkrki7DuRNekzqNhM_5KJobc3JA=w26-h26-e365"
+  },
+  "overview": {
+    "summary": "Crawl to any search results and scrape texts, links, images, keywords, emails & videos",
+    "description": "Scraper Crawler V3.0 is here! Can scrape thousands of Emails, phone numbers, links, SEO keywords, images and videos - and in the new version - also RegExps, Wikipedia pages, Instagram users, keywords combinations - all in one click and very faster than ever. Free features include *all scraping options* for 100 websites a day. Please support us with a $1 donation or buy the extended license to get unlimited scraping.\n\nHow to use it?\n- You go on a website, or a search engine results page\n- Click the scraper button\n- Click \"start\"\n- In the \"Settings\" tab, you can choose *what* to scrape, how deep to crawl, waiting times (you need waiting time if the site your crawl to has limitations!), and if to crawl into the original domain only or to continue crawling to the whole web.\n- Scrape SEO keyword sentences\n- Scrape phone numbers, skype accounts, wikipedia content, instagram/twitter accounts, and much more!\n- Target your competitors SEO design\n- Download all videos, images directly\n- Upload a list of URLs to scrape\n- Save scraped images to local folder.\n\nThe scraper is looking for pagination pages as well, so if for instance you went on a search engine results page, the scraper will try to click \"next\" for you.\n\nNOTE! Faked accounts or accounts without an Email will get deleted. \n\nPlease report any bugs to desk12131415@gmail.com\n\n\n",
+    "version": "3.4",
+    "lastUpdatedDate": "July 28, 2018",
+    "size": "174KiB",
+    "language": "English",
+    "screenshotURLs": [
+      "https://lh3.googleusercontent.com/T8LB3KWfpzp-5thTOWt5Ti5FB0aQjkT3hLqqZlJQVInHtnySD6DtI6GK9Q6Qe5p__CzMt6LPOsk=w640-h400-e365",
+      "https://lh3.googleusercontent.com/T8LB3KWfpzp-5thTOWt5Ti5FB0aQjkT3hLqqZlJQVInHtnySD6DtI6GK9Q6Qe5p__CzMt6LPOsk=w640-h400-e365",
+      "https://lh3.googleusercontent.com/T8LB3KWfpzp-5thTOWt5Ti5FB0aQjkT3hLqqZlJQVInHtnySD6DtI6GK9Q6Qe5p__CzMt6LPOsk=w120-h90-e365"
+    ],
+    "additionalInfo": [
+      {
+        "text": "Email:  info@startuprealizer.com",
+        "href": "mailto:info@startuprealizer.com"
+      },
+      {
+        "text": "Privacy Policy",
+        "href": "http://www.startuprealizer.com/comhype_limited_privacy_policy.pdf"
+      }
+    ]
+  },
+  "reviews": [
+    {
+      "displayName": "Mark Summerville",
+      "profileImageURL": "//plus.google.com/_/focus/photos/public/AIbEiAIAAABDCOusqrft2YvNVyILdmNhcmRfcGhvdG8qKDM5MjNmYzE5Y2M0MTJmMjNlN2ZhMjkxNzliMDRmODcwODdmOWY3ZDMwAU7BSK9f2NScxF9BfmTm6OLpqndS",
+      "displayNameURL": "https://plus.google.com/+MarkSummerville",
+      "timestamp": "Modified Jul 11, 2018",
+      "ratingString": "1 star (Hated it)",
+      "rating": 1,
+      "comment": "Needed to login (with no explaination as to why) Needed to provide way to many permissions than was appropriate for its use"
+    },
+    {
+      "displayName": "Sapir Ben-Shahar",
+      "profileImageURL": "//www.gstatic.com/s2/contacts/images/NoPicture.gif",
+      "displayNameURL": "https://plus.google.com/116392968836360043947",
+      "timestamp": "Modified Feb 28, 2018",
+      "ratingString": "5 stars (Loved it)",
+      "rating": 5,
+      "comment": "Great tool for researching, easy to use"
+    },
+    {
+      "displayName": "Naman Sharma",
+      "profileImageURL": "//plus.google.com/_/focus/photos/public/AIbEiAIAAABECL3x6Zj2zfC2kgEiC3ZjYXJkX3Bob3RvKig0OWQ1OTg3MmFiNjY0YzRiNjU1NmFkY2VhMzMxNzRlZTE3ZTc0YWQ4MAH5XBY_cEfZUPxrx2bgxK2kMxgf0g",
+      "displayNameURL": "https://plus.google.com/+NamanSharmaSEO",
+      "timestamp": "Modified Feb 27, 2018",
+      "ratingString": "5 stars (Loved it)",
+      "rating": 5,
+      "comment": "Its excellent tool"
+    }
+  ]
+}
