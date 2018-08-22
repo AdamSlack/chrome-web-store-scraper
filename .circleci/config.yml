@@ -9,7 +9,7 @@ jobs:
     docker:
       # specify the version you desire here
       - image: circleci/node:10.8.0
-      
+      - image: circleci/openjdk:8-jdk-browsers
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
@@ -33,7 +33,7 @@ jobs:
 
       - run:
           name: Install Chromium
-          command: wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - && echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' | sudo tee /etc/apt/sources.list.d/google-chrome.list && sudo apt-get update  && sudo apt-get install chromium-browser
+          command: wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - && echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' | sudo tee /etc/apt/sources.list.d/google-chrome.list && sudo apt-get update  && sudo apt-get install google-chrome-stable
 
       - run:
           name: Download Selenium
