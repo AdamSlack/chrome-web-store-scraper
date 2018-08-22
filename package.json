@@ -25,7 +25,6 @@
     "cheerio": "^1.0.0-rc.2",
     "google-play-scraper": "^6.1.0",
     "request": "^2.88.0",
-    "selenium-webdriver": "^4.0.0-alpha.1",
-    "url": "^0.11.0"
+    "selenium-webdriver": "^4.0.0-alpha.1"
   }
 }

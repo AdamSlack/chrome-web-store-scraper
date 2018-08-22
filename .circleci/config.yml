@@ -32,6 +32,8 @@ jobs:
           name: install mocha
           command: sudo npm install -g mocha
 
+      - run: npm -v && node -v
+      
       - run: npm install
 
       - save_cache:
