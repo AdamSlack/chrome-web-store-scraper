@@ -28,7 +28,7 @@ jobs:
       - run:
           name: Download Selenium
           command: curl -O http://selenium-release.storage.googleapis.com/3.5/selenium-server-standalone-3.5.3.jar && cp selenium-server-standalone-3.5.3.jar ./selenium.jar
-      - run: yarn install
+      - run: npm install
 
       - save_cache:
           paths:
@@ -36,6 +36,6 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
         
       # run tests!
-      - run: yarn test
+      - run: npm test
 
 
