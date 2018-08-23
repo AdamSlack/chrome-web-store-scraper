@@ -1,10 +1,6 @@
 const util = require('util');
 
 const Promise = require('bluebird').Promise;
-
-const request = Promise.promisify(require('request'), { multiArgs: true });
-Promise.promisifyAll(request);
-
 const cheerio = require('cheerio');
 
 const {Builder, By, Key, until, Capabilities} = require('selenium-webdriver');

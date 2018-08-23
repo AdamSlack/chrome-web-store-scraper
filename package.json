@@ -1,7 +1,7 @@
 {
   "name": "chrome-web-store-scraper",
   "version": "1.0.0",
-  "description": "a scraper for the Google Chrome extensions on the chrome web store",
+  "description": "A scraper for the Google Chrome extension metadata on the chrome web store",
   "main": "index.js",
   "directories": {
     "test": "test"
@@ -14,7 +14,17 @@
     "url": "git+https://github.com/AdamSlack/chrome-web-store-scraper.git"
   },
   "author": "Adam Slack",
-  "license": "ISC",
+  "license": "MIT",
+  "keywords": [
+    "google",
+    "chrome",
+    "extensions",
+    "selenium",
+    "scraper",
+    "web-scraper",
+    "web scraper",
+    "chrome-extensions"
+  ],
   "bugs": {
     "url": "https://github.com/AdamSlack/chrome-web-store-scraper/issues"
   },
@@ -24,7 +34,6 @@
     "chai": "^4.1.2",
     "cheerio": "^1.0.0-rc.2",
     "google-play-scraper": "^6.1.0",
-    "request": "^2.88.0",
     "selenium-webdriver": "^4.0.0-alpha.1"
   }
 }
