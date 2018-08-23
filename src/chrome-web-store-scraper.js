@@ -205,11 +205,20 @@ class ChromeWebStoreScraper {
     }
 
 
-    async parseSearchBody(driver) {
+    async parseSearchBody(driver, throttle) {
 
         var searchResults = [];
-        var timer = 0
+        
+        // wait for page to load, scroll, wait scroll, wait scroll...
+        const sleep = (time) => new Promise((res) => setTimeout(res, time));
+        for(var i=0; i<10; i++) {
+            await sleep(100);
+            driver.executeScript('window.scrollBy(0,500)', '')
+        }
 
+        console.log('Waiting for results to load.')
+        await sleep(throttle);
+        var timer = 0;
         while(searchResults.length == 0){
             searchResults = await Promise.all(driver.findElements(By.css(".a-d-na.a-d.webstore-test-wall-tile.a-d-zc.Xd.dd")));
             timer = timer + 1;
@@ -233,25 +242,26 @@ class ChromeWebStoreScraper {
                 break;
             }
             const html = await res.getAttribute('outerHTML');
-            const text = (await res.getText()).split('\n');
-
-            const resJSON = {};
-            for(let i=0;i<textHeadings.length;i++){
-                resJSON[textHeadings[i]] = text[i];
-            }
-
-            delete resJSON['buttonText'];
-            resJSON['numberOfRatings'] = parseInt(resJSON['numberOfRatings'].replace(/[\(\)]/g, ''));
 
             let $ = cheerio.load(html);
 
+            const title = $('.a-na-d-w').first().text();
+            const description = $('.a-na-d-Oa').first().text();
+            const author = $('.oc').first().text();
+            const category = $('.a-na-d-ea').text();
             const storeURL = $('.h-Ja-d-Ac.a-u').first().attr('href');
-            resJSON['storeURL'] = storeURL;
+            const numberOfRatings = $('.q-N-nd').first().text();
+            const rating = $('.rsw-stars').first().attr('g:rating_override');
 
-            const averageRating = $('.rsw-stars').first().attr('g:rating_override');
-            resJSON['rating'] = parseFloat(averageRating);
-
-
+            const resJSON = {
+                title: title ? title : '',
+                description : description ? description : '',
+                author : author ? author : '',
+                category : category ? category : '',
+                rating : rating ? parseFloat(rating) : -1,
+                numberOfRatings : numberOfRatings ? parseInt(numberOfRatings.replace(/[\(\)]/g, '')) : -1,
+                storeURL : storeURL ? storeURL : ''
+            }
             searchResultsJSON.push(resJSON);
         }
         return searchResultsJSON;
@@ -272,10 +282,11 @@ class ChromeWebStoreScraper {
         return encodeURI(searchURL);
     }
 
-    async search(searchString, options={searchCategory : undefined, searchFeatures: undefined}) {
+    async search(searchString, options={searchCategory : undefined, searchFeatures: undefined, throttle : undefined}) {
 
         const searchCategory = options.searchCategory !== undefined ? options.searchCategory :  'all'
         const searchFeatures = options.searchFeatures !== undefined ? options.searchFeatures :  []
+        const throttle = options.throttle !== undefined ? options.throttle : 3000
 
         // Check options are valid.
         if(searchFeatures.constructor !== Array) {
@@ -298,7 +309,7 @@ class ChromeWebStoreScraper {
         let driver = await this.createChromeDriver();
         try {
             await driver.get(searchURL);
-            searchResults = await this.parseSearchBody(driver);
+            searchResults = await this.parseSearchBody(driver, throttle);
         } finally {
             await driver.quit();
         }
