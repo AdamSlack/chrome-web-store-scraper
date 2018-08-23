@@ -251,14 +251,14 @@ class ChromeWebStoreScraper {
             const category = $('.a-na-d-ea').text();
             const storeURL = $('.h-Ja-d-Ac.a-u').first().attr('href');
             const numberOfRatings = $('.q-N-nd').first().text();
-            const averageRating = $('.rsw-stars').first().attr('g:rating_override');
+            const rating = $('.rsw-stars').first().attr('g:rating_override');
 
             const resJSON = {
                 title: title ? title : '',
                 description : description ? description : '',
                 author : author ? author : '',
                 category : category ? category : '',
-                averageRating : averageRating ? parseFloat(averageRating) : -1,
+                rating : rating ? parseFloat(rating) : -1,
                 numberOfRatings : numberOfRatings ? parseInt(numberOfRatings.replace(/[\(\)]/g, '')) : -1,
                 storeURL : storeURL ? storeURL : ''
             }
