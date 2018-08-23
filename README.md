@@ -7,7 +7,7 @@ A node js package for scraping the chrome web store.
 
 # Requirements
 
-This project requires selenium, a Web Browser Automation tool. The version of selenium can be downloaded from [seleniumhq](https://www.seleniumhq.org/P).
+This project requires selenium, a Web Browser Automation tool. The version of selenium can be downloaded from [seleniumhq](https://www.seleniumhq.org/download/).
 
 Selenium must also be installed and `selenium` must be on the system PATH. For linux, a `selenium` bash script is included that can be paired with the `selenium.jar` for ease of use.
 
