@@ -59,7 +59,7 @@ S        })
         it('must return an array with more than 0 elements for a known search term', function () {
             this.timeout(15000)
             const scraper = new ChromeWebStoreScraper();
-            const searchTerm = 'scraper';
+            const searchTerm = 'addiction';
 
             return scraper.search(searchTerm).then(
                 (succ) => assert.isAbove(succ.length, 0),
@@ -70,7 +70,7 @@ S        })
         it('JSON results should all have the following keys: title, author, description, category, numberOfRatings, storeURL, rating', function () {
             this.timeout(15000)
             const scraper = new ChromeWebStoreScraper();
-            const searchTerm = 'scraper';
+            const searchTerm = 'addiction';
             const expectedKeys = new Set(
                 ['title',
                 'author',

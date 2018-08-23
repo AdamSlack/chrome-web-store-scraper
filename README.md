@@ -7,7 +7,7 @@ A node js package for scraping the chrome web store.
 
 # Requirements
 
-This project requires selenium, a Web Browser Automation tool. The version of selenium can be downloaded from [seleniumhq](https://www.seleniumhq.org/download/).
+This project requires selenium, a Web Browser Automation tool. The latest version of the Selenium Standalone Server can be downloaded from [seleniumhq](https://www.seleniumhq.org/download/).
 
 Selenium must also be installed and `selenium` must be on the system PATH. For linux, a `selenium` bash script is included that can be paired with the `selenium.jar` for ease of use.
 
@@ -33,7 +33,7 @@ You can use this to scrape search results for chrome extensions, or to scrape st
 
 To include the scraper in your project:
 ```js
-const ChromeWebScraper = require('./src/chrome-web-store-scraper');
+const ChromeWebScraper = require('chrome-web-store-scraper');
 const scraper = new ChromeWebScraper();
 ```
 

@@ -11,20 +11,23 @@ class ChromeWebStoreScraper {
     constructor() {
         this.searchCategories = require('../data/search_categories.json');
         this.searchFeatures = require('../data/search_features.json');
+        this.driver = undefined;
+
     }
 
     async scrapeApp(appURL) {
-        let driver = await this.createChromeDriver();
         let details = {}
         try {
-            await driver.get(appURL);
-            details = await this.scrapeDetails(driver);
+            if(!this.driver) {
+                this.driver = await this.createChromeDriver();
+            }
+            await this.driver.get(appURL);
+            details = await this.scrapeDetails(this.driver);
         }
         catch(err){
             console.log('building failed', err)
         }
         finally {
-            await driver.quit();
             return details;
         }
 
@@ -201,15 +204,17 @@ class ChromeWebStoreScraper {
     }
 
 
-    async parseSearchBody(driver, throttle) {
+    async parseSearchBody(driver, throttle, scrollAttempts) {
 
+        console.log('Processing Selenium Search Page')
         var searchResults = [];
         
         // wait for page to load, scroll, wait scroll, wait scroll...
         const sleep = (time) => new Promise((res) => setTimeout(res, time));
-        for(var i=0; i<10; i++) {
-            await sleep(100);
-            driver.executeScript('window.scrollBy(0,500)', '')
+
+        for(var i=0; i<scrollAttempts; i++) {
+            await sleep(50);
+            driver.executeScript('window.scrollBy(0,1000)', '')
         }
 
         console.log('Waiting for results to load.')
@@ -278,11 +283,12 @@ class ChromeWebStoreScraper {
         return encodeURI(searchURL);
     }
 
-    async search(searchString, options={searchCategory : undefined, searchFeatures: undefined, throttle : undefined}) {
+    async search(searchString, options={searchCategory : undefined, searchFeatures: undefined, throttle : undefined, scrollAttempts : undefined}) {
 
         const searchCategory = options.searchCategory !== undefined ? options.searchCategory :  'all'
         const searchFeatures = options.searchFeatures !== undefined ? options.searchFeatures :  []
         const throttle = options.throttle !== undefined ? options.throttle : 3000
+        const scrollAttempts = options !== undefined ? options.scrollAttempts : 100
 
         // Check options are valid.
         if(searchFeatures.constructor !== Array) {
@@ -302,14 +308,16 @@ class ChromeWebStoreScraper {
 
         let searchResults = [];
 
-        let driver = await this.createChromeDriver();
         try {
-            await driver.get(searchURL);
-            searchResults = await this.parseSearchBody(driver, throttle);
-        } finally {
-            await driver.quit();
+            if(!this.driver) {
+                this.driver = await this.createChromeDriver();
+            }
+            await this.driver.get(searchURL);
+            searchResults = await this.parseSearchBody(this.driver, throttle, scrollAttempts);
         }
-
+        catch(err) {
+            console.log(err);
+        }
         return searchResults;
     }
 

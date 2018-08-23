@@ -4,8 +4,8 @@ const scraper = new ChromeWebScraper();
 const fs = require('fs');
 
 async function main() {
-    scraper.search('scraper').then(
-        (res) => console.log(res),
+    scraper.search('scraper',{scrollAttempts:200}).then(
+        (res) => console.log(res.length),
         (err) => console.log(err)
     );
     
