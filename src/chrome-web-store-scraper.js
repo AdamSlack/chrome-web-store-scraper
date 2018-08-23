@@ -247,7 +247,7 @@ class ChromeWebStoreScraper {
 
             const title = $('.a-na-d-w').first().text();
             const description = $('.a-na-d-Oa').first().text();
-            const devName = $('.oc').first().text();
+            const author = $('.oc').first().text();
             const category = $('.a-na-d-ea').text();
             const storeURL = $('.h-Ja-d-Ac.a-u').first().attr('href');
             const numberOfRatings = $('.q-N-nd').first().text();
@@ -256,7 +256,7 @@ class ChromeWebStoreScraper {
             const resJSON = {
                 title: title ? title : '',
                 description : description ? description : '',
-                devName : devName ? devName : '',
+                author : author ? author : '',
                 category : category ? category : '',
                 averageRating : averageRating ? parseFloat(averageRating) : -1,
                 numberOfRatings : numberOfRatings ? parseInt(numberOfRatings.replace(/[\(\)]/g, '')) : -1,
