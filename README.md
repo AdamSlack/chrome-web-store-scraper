@@ -1,4 +1,6 @@
 [![CircleCI](https://circleci.com/gh/AdamSlack/chrome-web-store-scraper.svg?style=shield)](https://circleci.com/gh/AdamSlack/chrome-web-store-scraper)
+[![npm version](https://badge.fury.io/js/chrome-web-store-scraper.svg)](https://badge.fury.io/js/chrome-web-store-scraper)
+[![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/Naereen/StrapDown.js/blob/master/LICENSE)
 
 # chrome-web-store-scraper
 A node js package for scraping the chrome web store.
