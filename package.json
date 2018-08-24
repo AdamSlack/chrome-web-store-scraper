@@ -1,6 +1,6 @@
 {
   "name": "chrome-web-store-scraper",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A scraper for the Google Chrome extension metadata on the chrome web store",
   "main": "index.js",
   "directories": {
@@ -30,7 +30,6 @@
   },
   "homepage": "https://github.com/AdamSlack/chrome-web-store-scraper#readme",
   "dependencies": {
-    "bluebird": "^3.5.1",
     "chai": "^4.1.2",
     "cheerio": "^1.0.0-rc.2",
     "selenium-webdriver": "^4.0.0-alpha.1"

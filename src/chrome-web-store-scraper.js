@@ -1,6 +1,3 @@
-const util = require('util');
-
-const Promise = require('bluebird').Promise;
 const cheerio = require('cheerio');
 
 const {Builder, By, Key, until, Capabilities} = require('selenium-webdriver');
@@ -221,7 +218,7 @@ class ChromeWebStoreScraper {
         await sleep(throttle);
         var timer = 0;
         while(searchResults.length == 0){
-            searchResults = await Promise.all(driver.findElements(By.css(".a-d-na.a-d.webstore-test-wall-tile.a-d-zc.Xd.dd")));
+            searchResults = await driver.findElements(By.css(".a-d-na.a-d.webstore-test-wall-tile.a-d-zc.Xd.dd"));
             timer = timer + 1;
             if(timer > WAIT_THRESHOLD) {
                 throw new Error('Unable to find search body.','Timer:',timer);
