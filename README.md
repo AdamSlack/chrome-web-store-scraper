@@ -138,6 +138,22 @@ scraper.search('searchString', options).then(
 
 ```
 
+## Search Options
+
+As well as the categories and feature filters, additional options in the form of `locale` and `scrollAttempts` can also be used.
+
+The `scrollAttempts` option is used to specify how many attempts are made to retrieve additional search results, by scrolling down the page loaded by selenium. the larger the number, the more the page will be scrolled down. It is worth noting that each scroll attempt is paired with a 50ms wait, so a number excessively large will result in longer processing times.
+
+The `locale` option can be set by passing a locale string as an option. The locale string is used as the `hl` url option by the chrome extension store, to scrape search results in french, danish, or italian, locale strings  `'fr'`, `'da'`, or `'it'` could be used.
+
+### Example Search with locale and scrollAttempts
+```js
+scraper.search('scraper',{scrollAttempts:200, locale:'da'}).then(
+    (res) => console.log(res[0]),
+    (err) => console.log(err)
+);
+```
+
 ## Extension Scraping
 
 In order to scrape the store page for a specific chrome extension, this scraper requires a direct url to that page. These urls are to be passed as a parameter to the `scrapeApp` function.
