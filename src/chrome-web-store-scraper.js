@@ -268,13 +268,21 @@ class ChromeWebStoreScraper {
         return searchResultsJSON;
     }
 
-    buildSearchURLString( searchString, options={searchCategory : undefined, searchFeatures: undefined}) {
+    buildSearchURLString(
+        searchString,
+        options={
+            searchCategory : undefined,
+            searchFeatures : undefined,
+            locale: undefined
+        }
+    ) {
         const searchCategory = options.searchCategory !== undefined ? options.searchCategory :  'all'
         const searchFeatures = options.searchFeatures !== undefined ? options.searchFeatures :  []
+        const locale = options.locale !== undefined ? options.locale : 'en-gb'
 
         // Form Search URL
         const baseURL = 'https://chrome.google.com/webstore/search'
-        let searchURL = `${baseURL}/${searchString}?_category=${this.searchCategories[searchCategory]}`;
+        let searchURL = `${baseURL}/${searchString}?hl=${locale}&_category=${this.searchCategories[searchCategory]}`;
 
         if(searchFeatures.length > 0) {
             searchURL = `${searchURL}&${searchFeatures.map((f) => this.searchFeatures[f]).join('&')}`
@@ -283,12 +291,21 @@ class ChromeWebStoreScraper {
         return encodeURI(searchURL);
     }
 
-    async search(searchString, options={searchCategory : undefined, searchFeatures: undefined, throttle : undefined, scrollAttempts : undefined}) {
-
+    async search(
+        searchString,
+        options={
+            searchCategory : undefined,
+            searchFeatures : undefined,
+            throttle : undefined,
+            scrollAttempts : undefined,
+            locale: undefined
+        }
+    ) {
         const searchCategory = options.searchCategory !== undefined ? options.searchCategory :  'all'
         const searchFeatures = options.searchFeatures !== undefined ? options.searchFeatures :  []
         const throttle = options.throttle !== undefined ? options.throttle : 3000
         const scrollAttempts = options !== undefined ? options.scrollAttempts : 100
+        const locale = options.locale !== undefined ? options.locale : 'en-gb'
 
         // Check options are valid.
         if(searchFeatures.constructor !== Array) {
@@ -304,7 +321,7 @@ class ChromeWebStoreScraper {
         }
 
         // build the encoded search URL.
-        const searchURL = this.buildSearchURLString(searchString, {searchCategory:searchCategory, searchFeatures:searchFeatures});
+        const searchURL = this.buildSearchURLString(searchString, {searchCategory:searchCategory, searchFeatures:searchFeatures, locale:locale});
 
         let searchResults = [];
 
