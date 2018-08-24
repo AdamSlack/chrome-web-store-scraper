@@ -33,7 +33,6 @@
     "bluebird": "^3.5.1",
     "chai": "^4.1.2",
     "cheerio": "^1.0.0-rc.2",
-    "google-play-scraper": "^6.1.0",
     "selenium-webdriver": "^4.0.0-alpha.1"
   }
 }
