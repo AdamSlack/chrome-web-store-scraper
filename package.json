@@ -1,6 +1,6 @@
 {
   "name": "chrome-web-store-scraper",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A scraper for the Google Chrome extension metadata on the chrome web store",
   "main": "index.js",
   "directories": {
