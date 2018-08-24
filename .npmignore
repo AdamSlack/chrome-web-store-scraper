@@ -1,2 +1,3 @@
 .circleci/
 main.js
+test/
