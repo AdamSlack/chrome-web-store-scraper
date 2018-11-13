@@ -196,6 +196,7 @@ class ChromeWebStoreScraper {
         const userCount = parseInt($('.e-f-ih').first().text().replace(/\D/g, ''));
         const ratingCount = parseInt($('.KnRoYd-N-nd').first().text().replace(/\D/g, ''));
 
+
         return {
             title : title,
             offeredBy : offeredBy,
