@@ -1,8 +1,8 @@
 const cheerio = require('cheerio');
 
-const {Builder, By, Key, until, Capabilities} = require('selenium-webdriver');
+const {Builder, By, Capabilities} = require('selenium-webdriver');
 
-const WAIT_THRESHOLD = 100;
+const WAIT_THRESHOLD = 1000;
 class ChromeWebStoreScraper {
 
     constructor() {
@@ -46,14 +46,16 @@ class ChromeWebStoreScraper {
         var reviewData = [];
         var timer = 0
         while(reviewData.length == 0){
-            reviewData.push(await driver.findElements(By.css('.ba-bc-Xb.ba-ua-zl-Xb')));
+            const selection = await driver.findElements(By.css('.ba-bc-Xb.ba-ua-zl-Xb'))
+            if(selection.length) {
+                reviewData.push(selection[0]);
+            }
             timer = timer + 1;
             if(timer > WAIT_THRESHOLD) {
                 console.log('No Reviews Found');
                 return {};
             }
         }
-
         let reviews = [];
         for(const data of reviewData) {
             let res = await data;
@@ -106,7 +108,10 @@ class ChromeWebStoreScraper {
         var overviewData = [];
         var timer = 0
         while(overviewData.length == 0){
-            overviewData.push(await driver.findElements(By.css(".h-e-f-b-Qe")));
+            const selection = await driver.findElements(By.css(".h-e-f-b-Qe"))
+            if(selection.length) {
+                overviewData.push(selection[0]);
+            }
             timer = timer + 1;
             if(timer > WAIT_THRESHOLD) {
                 return {}
@@ -163,7 +168,10 @@ class ChromeWebStoreScraper {
         var headerData = [];
         var timer = 0
         while(headerData.length == 0){
-            headerData.push(await driver.findElements(By.css(".e-f-o")));
+            const selection = await driver.findElements(By.css('.e-f-o'))
+            if(selection.length){
+                headerData.push(selection[0]);
+            }
             timer = timer + 1;
             if(timer > WAIT_THRESHOLD) {
                 return {}
@@ -172,7 +180,6 @@ class ChromeWebStoreScraper {
         let res = await headerData[0];
         let html = ''
         let header = {};
-
         if(typeof res.getAttribute === 'function'){
             html = await res.getAttribute('outerHTML');
             header = this.parseAppHeaderHTML(html);
@@ -186,7 +193,7 @@ class ChromeWebStoreScraper {
         const title = $('.e-f-w').first().text();
         const offeredBy = $('.e-f-Me').first().text();
         const rating = $('.rsw-stars').first().attr('g:rating_override');
-        const userCount = $('.e-f-ih').first().text().replace(' users', '').replace(' user', '');
+        const userCount = $('.e-f-ih').first().text().replace(/\D/g, '');
         const ratingCount = parseInt($('.q-N-nd').first().text().replace(/[\(\)]/g, ''));
 
         return {
