@@ -46,7 +46,7 @@ class ChromeWebStoreScraper {
         var reviewData = [];
         var timer = 0
         while(reviewData.length == 0){
-            reviewData = await Promise.all(driver.findElements(By.css('.ba-bc-Xb.ba-ua-zl-Xb')));
+            reviewData.push(await driver.findElements(By.css('.ba-bc-Xb.ba-ua-zl-Xb')));
             timer = timer + 1;
             if(timer > WAIT_THRESHOLD) {
                 console.log('No Reviews Found');
@@ -106,7 +106,7 @@ class ChromeWebStoreScraper {
         var overviewData = [];
         var timer = 0
         while(overviewData.length == 0){
-            overviewData = await Promise.all(driver.findElements(By.css(".h-e-f-b-Qe")));
+            overviewData.push(await driver.findElements(By.css(".h-e-f-b-Qe")));
             timer = timer + 1;
             if(timer > WAIT_THRESHOLD) {
                 return {}
@@ -163,13 +163,12 @@ class ChromeWebStoreScraper {
         var headerData = [];
         var timer = 0
         while(headerData.length == 0){
-            headerData = await Promise.all(driver.findElements(By.css(".e-f-o")));
+            headerData.push(await driver.findElements(By.css(".e-f-o")));
             timer = timer + 1;
             if(timer > WAIT_THRESHOLD) {
                 return {}
             }
         }
-
         let res = await headerData[0];
         let html = ''
         let header = {};
@@ -344,6 +343,7 @@ class ChromeWebStoreScraper {
         chromeCapabilities.set('chromeOptions', chromeOptions);
 
         console.log('Building Selenium Driver')
+
         return new Builder()
         .forBrowser('chrome')
         .withCapabilities(chromeCapabilities)
