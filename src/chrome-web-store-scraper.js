@@ -193,8 +193,8 @@ class ChromeWebStoreScraper {
         const title = $('.e-f-w').first().text();
         const offeredBy = $('.e-f-Me').first().text();
         const rating = $('.rsw-stars').first().attr('g:rating_override');
-        const userCount = $('.e-f-ih').first().text().replace(/\D/g, '');
-        const ratingCount = parseInt($('.q-N-nd').first().text().replace(/[\(\)]/g, ''));
+        const userCount = parseInt($('.e-f-ih').first().text().replace(/\D/g, ''));
+        const ratingCount = parseInt($('.KnRoYd-N-nd').first().text().replace(/\D/g, ''));
 
         return {
             title : title,
@@ -263,7 +263,7 @@ class ChromeWebStoreScraper {
                 author : author ? author : '',
                 category : category ? category : '',
                 rating : rating ? parseFloat(rating) : -1,
-                numberOfRatings : numberOfRatings ? parseInt(numberOfRatings.replace(/[\(\)]/g, '')) : -1,
+                numberOfRatings : numberOfRatings ? parseInt(numberOfRatings.replace(/\D/g, '')) : -1,
                 storeURL : storeURL ? storeURL : ''
             }
             searchResultsJSON.push(resJSON);
