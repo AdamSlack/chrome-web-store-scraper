@@ -43,7 +43,7 @@ class ChromeWebStoreScraper {
     while (reviewData.length === 0) {
       const selection = await driver.findElements(By.css('.ba-bc-Xb.ba-ua-zl-Xb'))
       if (selection.length) {
-        reviewData.push(selection[0])
+        reviewData = selection
       }
       timer = timer + 1
       if (timer > WAIT_THRESHOLD) {
