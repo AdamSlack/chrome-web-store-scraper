@@ -39,18 +39,28 @@ class ChromeWebStoreScraper {
   async scrapeReviews (driver) {
     // gonna need to go through each page and perform this...
     var reviewData = []
+    var nextPageButtons = []
     var timer = 0
-    while (reviewData.length === 0) {
+    while (reviewData.length === 0 || nextPageButtons.length !== 0) {
       const selection = await driver.findElements(By.css('.ba-bc-Xb.ba-ua-zl-Xb'))
+
+      if (nextPageButtons.length) {
+        nextPageButtons = await driver.findElements(By.css('.Aa.dc-se'))
+      }
       if (selection.length) {
-        reviewData = selection
+        reviewData = reviewData.concat(selection)
       }
       timer = timer + 1
       if (timer > WAIT_THRESHOLD) {
         console.log('No Reviews Found')
-        return {}
+        break
       }
     }
+
+    if(reviewData.length === 0) {
+      return {}
+    }
+
     let reviews = []
     for (const data of reviewData) {
       let res = await data
