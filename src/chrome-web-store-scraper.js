@@ -1,8 +1,8 @@
 const cheerio = require('cheerio')
 
-const { Builder, By, Capabilities } = require('selenium-webdriver')
+const { Builder, By, Capabilities, until } = require('selenium-webdriver')
 
-const WAIT_THRESHOLD = 1000
+const WAIT_THRESHOLD = 10000
 
 class ChromeWebStoreScraper {
   constructor () {
@@ -36,34 +36,47 @@ class ChromeWebStoreScraper {
     }
   }
 
-  async scrapeReviews (driver) {
-    // gonna need to go through each page and perform this...
-    var reviewData = []
-    var nextPageButtons = []
-    var timer = 0
-    while (reviewData.length === 0 || nextPageButtons.length !== 0) {
-      const selection = await driver.findElements(By.css('.ba-bc-Xb.ba-ua-zl-Xb'))
+  async scrapeReviews (driver, previousReviews) {
+    previousReviews = previousReviews || []
 
-      if (nextPageButtons.length) {
-        nextPageButtons = await driver.findElements(By.css('.Aa.dc-se'))
+    // Find Reviews CSS button, then click it.
+    const reviewButtons = await driver.findElements(By.css('.e-f-b-L'))
+    if (reviewButtons.length) {
+      console.log('Review Button Found')
+      await reviewButtons[0].click()
+      console.log('Review Button Clicked')
+    } else {
+      console.log('Review Button Not Found')
+    }
+
+    const reviewBySelector = By.css('.ba-fb > div')
+    const otherReviewBySelector = By.css('.ba-bc-xb')
+    let reviewData = []
+    try {
+      await driver.wait(until.elementsLocated(reviewBySelector), WAIT_THRESHOLD)
+      reviewData = await driver.findElements(reviewBySelector)
+    }
+    catch(err) {
+      console.log(`Could not find review elements using first Selector: ${err}`)
+    }
+
+    if (!reviewData.length) {
+      try {
+        await driver.wait(until.elementsLocated(otherReviewBySelector), WAIT_THRESHOLD)
+        reviewData = await driver.findElements(otherReviewBySelector)
       }
-      if (selection.length) {
-        reviewData = reviewData.concat(selection)
-      }
-      timer = timer + 1
-      if (timer > WAIT_THRESHOLD) {
-        console.log('No Reviews Found')
-        break
+      catch(err) {
+        console.log(`Could not find review elements using second Selector: ${err}`)
+        return {}
       }
     }
 
-    if(reviewData.length === 0) {
-      return {}
-    }
+    console.log(reviewData.length)
 
     let reviews = []
     for (const data of reviewData) {
       let res = await data
+      console.log(await res.getAttribute('outerHTML'))
       let html = ''
       let review = {}
 
@@ -80,7 +93,30 @@ class ChromeWebStoreScraper {
       }
     }
 
-    return reviews
+    // return reviews
+
+    previousReviews = previousReviews.concat(reviews)
+
+    console.log(`Scraped ${previousReviews.length} (+${reviews.length}) Reviews`)
+    const nextButtonBySelector = By.css('.Aa.dc-se')
+    let nextReviewsButtons = []
+
+    try {
+      await driver.wait(until.elementsLocated(nextButtonBySelector), WAIT_THRESHOLD)
+      nextReviewsButtons = await driver.findElement(nextButtonBySelector)
+      console.log(await nextReviewsButtons.getAttribute('innerHTML'))
+      console.log(await nextReviewsButtons.getAttribute('outerHTML'))
+      await driver.wait(until.elementIsVisible(nextReviewsButtons), WAIT_THRESHOLD)
+    }
+    catch(err) {
+      console.log(`Could not find Next Page Element: ${err}`)
+      return previousReviews
+    }
+
+    console.log(await nextReviewsButtons[0].getAttribute('outerHTML'))
+    await nextReviewsButtons[0].click()
+
+    return this.scrapeReviews(driver, previousReviews)
   }
 
   parseAppReviewHTML (html) {
