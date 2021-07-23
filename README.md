@@ -1,9 +1,14 @@
+# NOTICE
+It has been a very long time since i looked at this repo. i would guess it no longer functions. It might not take too much effort to fix up though.
+
+----------
 [![CircleCI](https://circleci.com/gh/AdamSlack/chrome-web-store-scraper.svg?style=shield)](https://circleci.com/gh/AdamSlack/chrome-web-store-scraper)
 [![npm version](https://badge.fury.io/js/chrome-web-store-scraper.svg)](https://badge.fury.io/js/chrome-web-store-scraper)
 [![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/Naereen/StrapDown.js/blob/master/LICENSE)
 [![sonarcloud](https://sonarcloud.io/api/project_badges/measure?project=AdamSlack_chrome-web-store-scraper&metric=alert_status)](https://sonarcloud.io/api/project_badges/measure?project=AdamSlack_chrome-web-store-scraper&metric=alert_status)
 # chrome-web-store-scraper
 A node js package for scraping the chrome web store.
+
 
 # Requirements
 
