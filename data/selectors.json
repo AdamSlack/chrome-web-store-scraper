@@ -1,0 +1,43 @@
+{
+  "header": {
+    "container": ".e-f-o",
+    "image": "img",
+    "title": ".e-f-w",
+    "offeredBy": ".e-f-Me",
+    "userCount": ".e-f-ih",
+    "rating": ".rsw-stars",
+    "ratingCount": ".KnRoYd-N-nd"
+  },
+  "overview": {
+    "container": ".h-e-f-b-Qe",
+    "summary": ".C-b-p-j-Pb",
+    "description": ".C-b-p-j-Oa",
+    "version": ".C-b-p-D-Xe.h-C-b-p-D-md",
+    "lastUpdatedDate": ".C-b-p-D-Xe.h-C-b-p-D-xh-hh",
+    "size": ".C-b-p-D-Xe.h-C-b-p-D-za",
+    "language": ".C-b-p-D-Xe.h-C-b-p-D-Ba",
+    "screenshots": ".h-A-Ce-ze-Yf.A-Ce-ze-Yf",
+    "additionalInfo": ".C-b-p-rc-D-R"
+  },
+  "reviews": {
+    "button": ".e-f-b-L",
+    "container": ".ba-fb > div",
+    "containerAlt": ".ba-bc-xb",
+    "nextPage": ".Aa.dc-se",
+    "profileImage": ".Lg-ee-A-O-xb",
+    "displayName": ".ba-bc-Xb-K",
+    "timestamp": ".ba-Eb-Nf",
+    "rating": ".rsw-stars",
+    "comment": ".ba-Eb-ba"
+  },
+  "search": {
+    "container": ".a-d-na.a-d.webstore-test-wall-tile.a-d-zc.Xd.dd",
+    "title": ".a-na-d-w",
+    "description": ".a-na-d-Oa",
+    "author": ".oc",
+    "category": ".a-na-d-ea",
+    "url": ".h-Ja-d-Ac.a-u",
+    "ratingCount": ".q-N-nd",
+    "rating": ".rsw-stars"
+  }
+}
